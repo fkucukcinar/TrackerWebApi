@@ -1,6 +1,8 @@
 # TrackerWebApi
-employee tracking web app
-This project has three sub projects
+Employee Tracking Web Application
+
+This project has three sub projects and used .Net Core 3.1 Version.
+
  1. Tracker Web Api - is responsible for the back end rest services
  2. Web App - is responsible for the front end side of the project.
  3. Tracker Web Api Test - is the test side of the backend codes.
