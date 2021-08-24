@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h4>Save Employee Tracks</h4>
+<hr />
+
+
+<div class="form-group">
+    <label for="Name">User Name:</label>
+    <input type="text" class="form-control" id="UserName" />
+</div>
+<div class="text-center panel-body">
+    <button class="btn btn-info" id="CheckIn">Check In</button>
+    <button class="btn btn-danger" id="CheckOut">Check Out</button>
+</div>
+<div class="text-center panel-body" id="result">
+    <label id="labelResult"></label>
+</div>
+
+<script src="~/js/jquery-1.9.1.min.js"></script>
+
+<script type="text/javascript">
+
+    var name = $("#UserName").val();
+    
+
+    $("#CheckIn").click(function (e) {
+        $.ajax({
+            url: "http://localhost:5000/api/Track/SaveTrack",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+
+                UserName: $("#UserName").val(),
+                IsEntrance: 1,
+                IsLeave: 0,
+                UserPass: '',
+                FullName: ''
+            }),
+            success: function (result, status, xhr) {
+                
+                var message = "";
+                if (result.HasError) {
+                    message = result.Message;     
+                }
+                else {
+                    message = "Check In Success";
+                }
+                
+                $("#labelResult").empty();
+                $("#labelResult").text(message);
+                $("#result").show();
+            },
+            error: function (xhr, status, error) {
+               
+                var str = "<label> Check In Save Error </label>"
+                $("#labelResult").append(str);
+                $("#result").show();
+            }
+        });
+    });
+
+    $("#CheckOut").click(function (e) {
+        $.ajax({
+            url: "http://localhost:5000/api/Track/SaveTrack",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+
+                UserName: $("#UserName").val(),
+                IsEntrance: 0,
+                IsLeave: 1,
+                UserPass: '',
+                FullName: ''
+            }),
+            success: function (result, status, xhr) {
+                var message = "";
+                var message = "";
+                if (result.HasError) {
+                    message = result.Message;
+                }
+                else {
+                    message = "Check Out Success";
+                }
+
+                $("#labelResult").empty();
+                $("#labelResult").text(message);
+                $("#result").show();
+            },
+            error: function (xhr, status, error) {
+                var str = "<label> Check Out Save Error </label>"
+                $("#labelResult").append(str);
+                $("#result").show();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<h4>Employee Login</h4>
+<hr />
+
+<div class="form-group">
+    <label>User Name</label>
+    <input type="text" class="form-control" id="UserName" placeholder="user name"/>
+    <button class="btn btn-info" type="submit" id="Login">Login And Show Track Info</button>
+</div>
+   
+<div class="text-center panel-body" id="result">
+    <label id="labelResult"></label>
+</div>
+
+    <div style="display:none" id="resultDiv">
+        <h2>User Tracks</h2>
+        <table class="table table-sm table-striped table-bordered m-2">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Track Day</th>
+                    <th>Entrance Time</th>
+                    <th>Leave Time</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="trackList">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="~/js/jquery-1.9.1.min.js"></script>
+
+    <script type="text/javascript">
+        debugger;
+        var name = $("#UserName").val();
+        var isAdmin = false;
+
+        $("#Login").click(function (e) {
+            $.ajax({
+                url: "http://localhost:5000/api/Track/Login",
+                type: "get",
+                contentType: "application/json",
+                data: {
+                    userName: $("#UserName").val()
+                },
+
+                success: function (result, status, xhr) {
+                    $("#labelResult").empty();
+                    isAdmin = result;
+                    if (isAdmin) {
+                        $.ajax({
+                            url: "http://localhost:5000/api/Track/GetTracks",
+                            type: "get",
+                            contentType: "application/json",
+                            success: function (result, status, xhr) {
+                                $("#trackList").empty();
+                                var str = "";
+                                for (var i = 0; i < result.length; i++)
+                                {
+                                    var leaveTime = "";
+                                    if (result[i]["LeaveTime"] != null)
+                                        leaveTime = result[i]["LeaveTime"];
+                                    str += "<tr><td>" + result[i]["FullName"] + "</td><td>" + result[i]["TrackDay"].slice(0, -7) + "</td><td>" + result[i]["EntranceTime"] + "</td><td>" + leaveTime + "</td>"
+                                }
+                               
+                                $("table tbody").append(str);
+                                $("#resultDiv").show();
+                            }
+                        });
+                    }
+                    else {
+                        var str = " You are not authorized to view user tracks. "
+                        $("#labelResult").empty();
+                        $("#labelResult").text(str);
+                       
+                        $("#result").show();
+                        $("#resultDiv").hide();
+                    }
+
+
+                },
+                error: function (xhr, status, error) {
+                    var str = "System Error. "
+                    $("#labelResult").empty();
+                    $("#labelResult").text(str);
+                    $("#result").show();
+                    $("#resultDiv").hide();
+                }
+            });
+        });
+
+
+    </script>
