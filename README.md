@@ -10,6 +10,7 @@ This project has three sub projects and used .Net Core 3.1 Version.
 This project has been used mssql db. so you can find the create script of the tables below.
 
 ***** Track Table **************
+
 CREATE TABLE [dbo].[Track](
 	[TrackId] [bigint] IDENTITY(1,1) NOT NULL,
 	[UserId] [bigint] NULL,
@@ -24,6 +25,7 @@ CREATE TABLE [dbo].[Track](
 GO
 
 ***** User Table ***************
+
 CREATE TABLE [dbo].[User](
 	[UserId] [bigint] IDENTITY(1,1) NOT NULL,
 	[FullName] [nvarchar](250) NULL,
